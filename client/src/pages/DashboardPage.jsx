@@ -13,7 +13,7 @@ export default function DashboardPage() {
   return (
     <>
       <AppHeader />
-      <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[22rem_1fr]">
+      <main className="mx-auto grid max-w-6xl gap-5 px-3 py-4 sm:gap-6 sm:px-6 sm:py-6 lg:grid-cols-[22rem_1fr]">
         <AppointmentForm onSubmit={createAppointment} />
         <section aria-label="Appointments" className="space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
