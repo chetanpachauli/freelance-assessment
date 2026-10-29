@@ -30,8 +30,8 @@ export function errorHandler(error, _req, res, _next) {
 
   res.status(appError.statusCode).json({
     success: false,
-    message: appError.message,
+    message: error.message || appError.message,
     ...(appError.fieldErrors && { errors: appError.fieldErrors }),
-    ...(isServerError && !env.isProduction && { stack: error.stack }),
+    ...(isServerError && { stack: error.stack }),
   });
 }

@@ -1,25 +1,39 @@
+import express from 'express';
 import { createApp } from './src/app.js';
 import { connectDatabase } from './src/config/db.js';
 import { env } from './src/config/env.js';
 import { appointmentService } from './src/services/appointment.service.js';
 
-const app = createApp();
+const app = express();
 
-let isConnected = false;
+let dbReady = null;
 
-// Ensure DB is connected before handling requests
-app.use(async (_req, _res, next) => {
-  if (!isConnected) {
-    try {
+function ensureDatabase() {
+  if (!dbReady) {
+    dbReady = (async () => {
       await connectDatabase();
       await appointmentService.seedIfEmpty();
-      isConnected = true;
-    } catch (err) {
-      console.error('Database connection error in middleware:', err.message);
-    }
+    })().catch((err) => {
+      dbReady = null;
+      throw err;
+    });
   }
-  next();
+  return dbReady;
+}
+
+// Connect before the routes run, otherwise serverless requests hit an
+// unconnected Mongoose instance and fail with a 500.
+app.use(async (_req, _res, next) => {
+  try {
+    await ensureDatabase();
+    next();
+  } catch (err) {
+    console.error('Database connection error in middleware:', err.message);
+    next(err);
+  }
 });
+
+app.use(createApp());
 
 // For local server execution
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
