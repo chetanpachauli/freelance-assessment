@@ -12,21 +12,12 @@ export function createApp() {
   const app = express();
 
   app.use(helmet());
-  app.use(
-    cors({
-      origin: (origin, callback) => {
-        if (!origin || /^http:\/\/localhost:\d+$/.test(origin) || origin === env.clientOrigin) {
-          callback(null, true);
-        } else {
-          callback(new Error('Not allowed by CORS'));
-        }
-      },
-    })
-  );
+  app.use(cors({ origin: true, credentials: true }));
   app.use(express.json({ limit: JSON_BODY_LIMIT }));
   if (!env.isProduction) app.use(morgan('dev'));
 
   app.use('/api', routes);
+  app.use('/', routes);
   app.use(notFoundHandler);
   app.use(errorHandler);
 
