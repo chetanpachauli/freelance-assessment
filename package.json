@@ -2,6 +2,7 @@
   "name": "appointment-manager",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Appointment Manager - Full Stack MERN Application",
   "scripts": {
     "install:all": "npm install && npm --prefix server install && npm --prefix client install",
@@ -12,6 +13,15 @@
     "seed": "npm --prefix server run seed",
     "test": "npm --prefix server test",
     "build": "npm --prefix client run build"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "mongoose": "^8.5.0",
+    "morgan": "^1.10.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
